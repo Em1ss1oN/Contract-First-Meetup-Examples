@@ -28,7 +28,7 @@
       "arrayType": "System.Collections.Generic.List",
       "arrayInstanceType": "System.Collections.ObjectModel.Collection",
       "classStyle": "Poco",
-      "output": "$(OutputFilePath)/IncidentsControllerBase.cs"
+      "output": "$(OutputFilePath)/IncidentsController.generated.cs"
     }
   }
 }

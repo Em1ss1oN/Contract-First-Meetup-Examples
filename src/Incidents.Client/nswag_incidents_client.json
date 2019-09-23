@@ -1,0 +1,15 @@
+{
+  "runtime": "NetCore22",
+  "defaultVariables": null,
+  "swaggerGenerator": {
+    "fromSwagger": {
+      "url": "../../contracts/incidents.yaml",
+      "output": null
+    }
+  },
+  "codeGenerators": {
+    "swaggerToCSharpClient": {
+      "output": "$(OutputFilePath)/IncidentsClient.generated.cs"
+    }
+  }
+}
