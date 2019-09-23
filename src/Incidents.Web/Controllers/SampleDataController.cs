@@ -1,41 +1,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Incidents.Web.Controllers
 {
-    [Route("api/[controller]")]
-    public class SampleDataController : Controller
+    public class IncidentsController : IncidentsControllerBase
     {
-        private static string[] Summaries = new[]
+        public override Task<IncidentListDto> GetAll(int? limit, int? offset, CancellationToken cancellationToken)
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        [HttpGet("[action]")]
-        public IEnumerable<WeatherForecast> WeatherForecasts()
-        {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                DateFormatted = DateTime.Now.AddDays(index).ToString("d"),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            });
+            throw new NotImplementedException();
         }
 
-        public class WeatherForecast
+        public override Task<ObjectId> Create(IncidentModel request, CancellationToken cancellationToken)
         {
-            public string DateFormatted { get; set; }
-            public int TemperatureC { get; set; }
-            public string Summary { get; set; }
+            throw new NotImplementedException();
+        }
 
-            public int TemperatureF
-            {
-                get { return 32 + (int) (TemperatureC / 0.5556); }
-            }
+        public override Task<IncidentDto> Get(Guid id, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,33 +1,71 @@
-{
+﻿{
   "runtime": "NetCore22",
   "defaultVariables": null,
-  "swaggerGenerator": {
-    "fromSwagger": {
-      "url": "../../contracts/incidents.yaml",
+  "documentGenerator": {
+    "fromDocument": {
+      "url": "../../contract/incidents.yaml",
       "output": null
     }
   },
   "codeGenerators": {
-    "swaggerToCSharpController": {
+    "openApiToCSharpController": {
       "controllerBaseClass": "Microsoft.AspNetCore.Mvc.Controller",
       "controllerStyle": "Abstract",
       "controllerTarget": "AspNetCore",
       "useCancellationToken": true,
+      "useActionResultType": false,
+      "generateModelValidationAttributes": false,
+      "routeNamingStrategy": "None",
       "className": "Incidents",
       "operationGenerationMode": "MultipleClientsFromOperationId",
+      "additionalNamespaceUsages": [],
+      "additionalContractNamespaceUsages": [],
+      "generateOptionalParameters": false,
       "generateJsonMethods": false,
+      "enforceFlagEnums": false,
       "parameterArrayType": "System.Collections.Generic.IEnumerable",
       "parameterDictionaryType": "System.Collections.Generic.IDictionary",
       "responseArrayType": "System.Collections.Generic.List",
       "responseDictionaryType": "System.Collections.Generic.IDictionary",
+      "wrapResponses": false,
+      "wrapResponseMethods": [],
+      "generateResponseClasses": true,
       "responseClass": "SwaggerResponse",
       "namespace": "$(RootNamespace).Controllers",
       "requiredPropertiesMustBeDefined": true,
       "dateType": "System.DateTimeOffset",
+      "jsonConverters": null,
+      "anyType": "object",
       "dateTimeType": "System.DateTimeOffset",
+      "timeType": "System.TimeSpan",
+      "timeSpanType": "System.TimeSpan",
       "arrayType": "System.Collections.Generic.List",
       "arrayInstanceType": "System.Collections.ObjectModel.Collection",
+      "dictionaryType": "System.Collections.Generic.IDictionary",
+      "dictionaryInstanceType": "System.Collections.Generic.Dictionary",
+      "arrayBaseType": "System.Collections.ObjectModel.Collection",
+      "dictionaryBaseType": "System.Collections.Generic.Dictionary",
       "classStyle": "Poco",
+      "generateDefaultValues": true,
+      "generateDataAnnotations": true,
+      "excludedTypeNames": [],
+      "excludedParameterNames": [],
+      "handleReferences": false,
+      "generateImmutableArrayProperties": false,
+      "generateImmutableDictionaryProperties": false,
+      "jsonSerializerSettingsTransformationMethod": null,
+      "inlineNamedArrays": false,
+      "inlineNamedDictionaries": false,
+      "inlineNamedTuples": true,
+      "inlineNamedAny": false,
+      "generateDtoTypes": true,
+      "generateOptionalPropertiesAsNullable": false,
+      "templateDirectory": null,
+      "typeNameGeneratorType": null,
+      "propertyNameGeneratorType": null,
+      "enumNameGeneratorType": null,
+      "serviceHost": null,
+      "serviceSchemes": null,
       "output": "$(OutputFilePath)/IncidentsController.generated.cs"
     }
   }

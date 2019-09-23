@@ -32,6 +32,7 @@ namespace Incidents.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseOpenApi();
             }
             else
             {
