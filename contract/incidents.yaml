@@ -1,0 +1,212 @@
+---
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Sample CERT API
+  description: Sample CERT API
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /api/incidents:
+    get:
+      tags:
+        - Incidents
+      description: Returns all incidents from the system that the user has access to
+      operationId: Incidents_GetAll
+      parameters:
+        - name: limit
+          in: query
+          type: integer
+        - name: offset
+          in: query
+          type: integer
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/IncidentListDto'
+        '401':
+          description: Unauthorized
+          type : string
+        default:
+          description: unexpected error
+          type : string
+    post:
+      tags:
+        - Incidents
+      operationId: Incidents_Create
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/IncidentModel'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ObjectId'
+        '400':
+          description: Invalid Model
+          type: string
+        '401':
+          description: Unauthorized
+          type: string
+        default:
+          description: unexpected error
+          type: string
+  /api/incidents/{id}:
+    get:
+      tags:
+        - Incidents
+      description: Returns an incident by specified identifier
+      operationId: Incidents_Get
+      produces:
+        - application/json
+      consumes: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          format: guid
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/IncidentDto'
+        '401':
+          description: Unauthorized
+          type: string
+        default:
+          description: unexpected error
+          type: string
+definitions:
+  IncidentListDto:
+    type: object
+    properties:
+      total:
+        format: int64
+        type: integer
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/IncidentListItemDto'
+  IncidentListItemDto:
+    type: object
+    required:
+      - id
+      - modified
+      - status
+    properties:
+      id:
+        type: string
+        format: guid
+        minlength: 1
+        description: Incident unique identifier
+      type:
+        $ref: '#/definitions/IncidentTypeDto'
+      modified:
+        format: date-time
+        type: string
+        minlength: 1
+        description: Modified date
+      created:
+        format: date-time
+        type: string
+        minlength: 1
+        description: Created date
+      reporter:
+        type: string
+        minLength: 1
+        description: Incident reporter name
+  IncidentTypeDto:
+    type: string
+    description: Incident Type
+    enum:
+      - none
+      - malware
+      - phishing
+      - socialEngineering
+      - ddos
+  IncidentDto:
+    type: object
+    properties:
+      id:
+        type: string
+        format: guid
+        minlength: 1
+        description: Incident unique identifier
+      type:
+        $ref: '#/definitions/IncidentTypeDto'
+      detected:
+        format: date-time
+        type: string
+        minlength: 1
+        description: Detected date
+      created:
+        format: date-time
+        type: string
+        minlength: 1
+        description: Created date
+      reporter:
+        type: string
+        minLength: 1
+        description: Incident reporter name
+      description: 
+        type: string
+        description: Incident description
+      tlp:
+        $ref: '#/definitions/IncidentTlp'
+  IncidentModel:
+    type: object
+    required:
+      - type
+      - reporter
+      - tlp
+      - detected
+    properties:
+      type:
+        $ref: '#/definitions/IncidentTypeDto'
+      detected:
+        format: date-time
+        type: string
+        minlength: 1
+        description: Detected date
+      reporter:
+        type: string
+        minLength: 1
+        description: Incident reporter name
+      description:
+        type: string
+        description: Incident description
+      tlp:
+        $ref: '#/definitions/IncidentTlp'
+  ObjectId:
+    type: object
+    description: Object Id
+    required:
+      - id
+    properties:
+      id:
+        type: string
+        format: guid
+        minlength: 1
+  IncidentTlp:
+    type: string
+    enum: 
+      - red
+      - yellow
+      - green
+      - white
+    description: Traffic Lights Protocol
