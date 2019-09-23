@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Incidents.Web", "Incidents.Web\Incidents.Web.csproj", "{DC71321F-C4CB-4A2D-A825-5A0B2D125EC8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Incidents.Web", "src\Incidents.Web\Incidents.Web.csproj", "{DC71321F-C4CB-4A2D-A825-5A0B2D125EC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Incidents.Client", "Incidents.Client\Incidents.Client.csproj", "{5C002EFA-298E-4DAD-AB28-2C6F9C7603DB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Incidents.Client", "src\Incidents.Client\Incidents.Client.csproj", "{5C002EFA-298E-4DAD-AB28-2C6F9C7603DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
