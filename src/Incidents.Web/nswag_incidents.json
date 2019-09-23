@@ -1,0 +1,34 @@
+{
+  "runtime": "NetCore22",
+  "defaultVariables": null,
+  "swaggerGenerator": {
+    "fromSwagger": {
+      "url": "../../contracts/incidents.yaml",
+      "output": null
+    }
+  },
+  "codeGenerators": {
+    "swaggerToCSharpController": {
+      "controllerBaseClass": "Microsoft.AspNetCore.Mvc.Controller",
+      "controllerStyle": "Abstract",
+      "controllerTarget": "AspNetCore",
+      "useCancellationToken": true,
+      "className": "Incidents",
+      "operationGenerationMode": "MultipleClientsFromOperationId",
+      "generateJsonMethods": false,
+      "parameterArrayType": "System.Collections.Generic.IEnumerable",
+      "parameterDictionaryType": "System.Collections.Generic.IDictionary",
+      "responseArrayType": "System.Collections.Generic.List",
+      "responseDictionaryType": "System.Collections.Generic.IDictionary",
+      "responseClass": "SwaggerResponse",
+      "namespace": "$(RootNamespace).Controllers",
+      "requiredPropertiesMustBeDefined": true,
+      "dateType": "System.DateTimeOffset",
+      "dateTimeType": "System.DateTimeOffset",
+      "arrayType": "System.Collections.Generic.List",
+      "arrayInstanceType": "System.Collections.ObjectModel.Collection",
+      "classStyle": "Poco",
+      "output": "$(OutputFilePath)/IncidentsControllerBase.cs"
+    }
+  }
+}
