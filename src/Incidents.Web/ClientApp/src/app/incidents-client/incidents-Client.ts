@@ -26,7 +26,7 @@ export class IncidentsClient {
     }
 
     getAll(limit: number | null, offset: number | null): Observable<IncidentListDto | null> {
-        let url_ = this.baseUrl + "/api/Incidents?";
+        let url_ = this.baseUrl + "/api/incidents?";
         if (limit === undefined)
             throw new Error("The parameter 'limit' must be defined.");
         else
@@ -82,7 +82,7 @@ export class IncidentsClient {
     }
 
     create(type: IncidentTypeDto, detected: Date, reporter: string | null, description: string | null | undefined, tlp: IncidentTlp): Observable<ObjectId | null> {
-        let url_ = this.baseUrl + "/api/Incidents?";
+        let url_ = this.baseUrl + "/api/incidents?";
         if (type === undefined || type === null)
             throw new Error("The parameter 'type' must be defined and cannot be null.");
         else
@@ -148,7 +148,7 @@ export class IncidentsClient {
     }
 
     get(id: string): Observable<IncidentDto | null> {
-        let url_ = this.baseUrl + "/api/Incidents/{id}";
+        let url_ = this.baseUrl + "/api/incidents/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id)); 

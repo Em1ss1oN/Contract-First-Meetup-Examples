@@ -24,6 +24,8 @@ namespace Incidents.Web
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
+
+            services.AddOpenApiDocument();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,6 +35,7 @@ namespace Incidents.Web
             {
                 app.UseDeveloperExceptionPage();
                 app.UseOpenApi();
+                app.UseSwaggerUi3();
             }
             else
             {
