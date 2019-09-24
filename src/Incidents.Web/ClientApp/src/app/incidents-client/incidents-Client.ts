@@ -22,19 +22,18 @@ export class IncidentsClient {
 
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(BASE_URL) baseUrl?: string) {
         this.http = http;
-        this.baseUrl = baseUrl ? baseUrl : "http://";
+        this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    /**
-     * @param limit (optional) 
-     * @param offset (optional) 
-     * @return OK
-     */
-    getAll(limit: number | null | undefined, offset: number | null | undefined): Observable<IncidentListDto> {
-        let url_ = this.baseUrl + "/api/incidents?";
-        if (limit !== undefined)
+    getAll(limit: number | null, offset: number | null): Observable<IncidentListDto | null> {
+        let url_ = this.baseUrl + "/api/Incidents?";
+        if (limit === undefined)
+            throw new Error("The parameter 'limit' must be defined.");
+        else
             url_ += "limit=" + encodeURIComponent("" + limit) + "&"; 
-        if (offset !== undefined)
+        if (offset === undefined)
+            throw new Error("The parameter 'offset' must be defined.");
+        else
             url_ += "offset=" + encodeURIComponent("" + offset) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
@@ -53,14 +52,14 @@ export class IncidentsClient {
                 try {
                     return this.processGetAll(<any>response_);
                 } catch (e) {
-                    return <Observable<IncidentListDto>><any>_observableThrow(e);
+                    return <Observable<IncidentListDto | null>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<IncidentListDto>><any>_observableThrow(response_);
+                return <Observable<IncidentListDto | null>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetAll(response: HttpResponseBase): Observable<IncidentListDto> {
+    protected processGetAll(response: HttpResponseBase): Observable<IncidentListDto | null> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -71,35 +70,43 @@ export class IncidentsClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = IncidentListDto.fromJS(resultData200);
+            result200 = resultData200 ? IncidentListDto.fromJS(resultData200) : <any>null;
             return _observableOf(result200);
             }));
-        } else if (status === 401) {
+        } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            }));
-        } else {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("unexpected error", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
+        return _observableOf<IncidentListDto | null>(<any>null);
     }
 
-    /**
-     * @return OK
-     */
-    create(request: IncidentModel): Observable<ObjectId> {
-        let url_ = this.baseUrl + "/api/incidents";
+    create(type: IncidentTypeDto, detected: Date, reporter: string | null, description: string | null | undefined, tlp: IncidentTlp): Observable<ObjectId | null> {
+        let url_ = this.baseUrl + "/api/Incidents?";
+        if (type === undefined || type === null)
+            throw new Error("The parameter 'type' must be defined and cannot be null.");
+        else
+            url_ += "Type=" + encodeURIComponent("" + type) + "&"; 
+        if (detected === undefined || detected === null)
+            throw new Error("The parameter 'detected' must be defined and cannot be null.");
+        else
+            url_ += "Detected=" + encodeURIComponent(detected ? "" + detected.toJSON() : "") + "&"; 
+        if (reporter === undefined)
+            throw new Error("The parameter 'reporter' must be defined.");
+        else
+            url_ += "Reporter=" + encodeURIComponent("" + reporter) + "&"; 
+        if (description !== undefined)
+            url_ += "Description=" + encodeURIComponent("" + description) + "&"; 
+        if (tlp === undefined || tlp === null)
+            throw new Error("The parameter 'tlp' must be defined and cannot be null.");
+        else
+            url_ += "Tlp=" + encodeURIComponent("" + tlp) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(request);
-
         let options_ : any = {
-            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json", 
                 "Accept": "application/json"
             })
         };
@@ -111,14 +118,14 @@ export class IncidentsClient {
                 try {
                     return this.processCreate(<any>response_);
                 } catch (e) {
-                    return <Observable<ObjectId>><any>_observableThrow(e);
+                    return <Observable<ObjectId | null>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<ObjectId>><any>_observableThrow(response_);
+                return <Observable<ObjectId | null>><any>_observableThrow(response_);
         }));
     }
 
-    protected processCreate(response: HttpResponseBase): Observable<ObjectId> {
+    protected processCreate(response: HttpResponseBase): Observable<ObjectId | null> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -129,29 +136,19 @@ export class IncidentsClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ObjectId.fromJS(resultData200);
+            result200 = resultData200 ? ObjectId.fromJS(resultData200) : <any>null;
             return _observableOf(result200);
             }));
-        } else if (status === 400) {
+        } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("Invalid Model", status, _responseText, _headers);
-            }));
-        } else if (status === 401) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            }));
-        } else {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("unexpected error", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
+        return _observableOf<ObjectId | null>(<any>null);
     }
 
-    /**
-     * @return OK
-     */
-    get(id: string): Observable<IncidentDto> {
-        let url_ = this.baseUrl + "/api/incidents/{id}";
+    get(id: string): Observable<IncidentDto | null> {
+        let url_ = this.baseUrl + "/api/Incidents/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
@@ -172,14 +169,14 @@ export class IncidentsClient {
                 try {
                     return this.processGet(<any>response_);
                 } catch (e) {
-                    return <Observable<IncidentDto>><any>_observableThrow(e);
+                    return <Observable<IncidentDto | null>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<IncidentDto>><any>_observableThrow(response_);
+                return <Observable<IncidentDto | null>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGet(response: HttpResponseBase): Observable<IncidentDto> {
+    protected processGet(response: HttpResponseBase): Observable<IncidentDto | null> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -190,18 +187,15 @@ export class IncidentsClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = IncidentDto.fromJS(resultData200);
+            result200 = resultData200 ? IncidentDto.fromJS(resultData200) : <any>null;
             return _observableOf(result200);
             }));
-        } else if (status === 401) {
+        } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            }));
-        } else {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("unexpected error", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
+        return _observableOf<IncidentDto | null>(<any>null);
     }
 }
 
@@ -220,10 +214,10 @@ export class IncidentListDto implements IIncidentListDto {
 
     init(data?: any) {
         if (data) {
-            this.total = data["total"];
-            if (Array.isArray(data["items"])) {
+            this.total = data["Total"];
+            if (Array.isArray(data["Items"])) {
                 this.items = [] as any;
-                for (let item of data["items"])
+                for (let item of data["Items"])
                     this.items!.push(IncidentListItemDto.fromJS(item));
             }
         }
@@ -238,11 +232,11 @@ export class IncidentListDto implements IIncidentListDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["total"] = this.total;
+        data["Total"] = this.total;
         if (Array.isArray(this.items)) {
-            data["items"] = [];
+            data["Items"] = [];
             for (let item of this.items)
-                data["items"].push(item.toJSON());
+                data["Items"].push(item.toJSON());
         }
         return data; 
     }
@@ -254,15 +248,11 @@ export interface IIncidentListDto {
 }
 
 export class IncidentListItemDto implements IIncidentListItemDto {
-    /** Incident unique identifier */
     id!: string;
-    type?: IncidentTypeDto | undefined;
-    /** Modified date */
+    type!: IncidentTypeDto;
     modified!: Date;
-    /** Created date */
-    created?: Date | undefined;
-    /** Incident reporter name */
-    reporter?: string | undefined;
+    created!: Date;
+    reporter!: string;
 
     constructor(data?: IIncidentListItemDto) {
         if (data) {
@@ -275,11 +265,11 @@ export class IncidentListItemDto implements IIncidentListItemDto {
 
     init(data?: any) {
         if (data) {
-            this.id = data["id"];
-            this.type = data["type"];
-            this.modified = data["modified"] ? new Date(data["modified"].toString()) : <any>undefined;
-            this.created = data["created"] ? new Date(data["created"].toString()) : <any>undefined;
-            this.reporter = data["reporter"];
+            this.id = data["Id"];
+            this.type = data["Type"];
+            this.modified = data["Modified"] ? new Date(data["Modified"].toString()) : <any>undefined;
+            this.created = data["Created"] ? new Date(data["Created"].toString()) : <any>undefined;
+            this.reporter = data["Reporter"];
         }
     }
 
@@ -292,165 +282,31 @@ export class IncidentListItemDto implements IIncidentListItemDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["type"] = this.type;
-        data["modified"] = this.modified ? this.modified.toISOString() : <any>undefined;
-        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
-        data["reporter"] = this.reporter;
+        data["Id"] = this.id;
+        data["Type"] = this.type;
+        data["Modified"] = this.modified ? this.modified.toISOString() : <any>undefined;
+        data["Created"] = this.created ? this.created.toISOString() : <any>undefined;
+        data["Reporter"] = this.reporter;
         return data; 
     }
 }
 
 export interface IIncidentListItemDto {
-    /** Incident unique identifier */
     id: string;
-    type?: IncidentTypeDto | undefined;
-    /** Modified date */
-    modified: Date;
-    /** Created date */
-    created?: Date | undefined;
-    /** Incident reporter name */
-    reporter?: string | undefined;
-}
-
-/** Incident Type */
-export enum IncidentTypeDto {
-    None = "none",
-    Malware = "malware",
-    Phishing = "phishing",
-    SocialEngineering = "socialEngineering",
-    Ddos = "ddos",
-}
-
-export class IncidentDto implements IIncidentDto {
-    /** Incident unique identifier */
-    id?: string | undefined;
-    type?: IncidentTypeDto | undefined;
-    /** Detected date */
-    detected?: Date | undefined;
-    /** Created date */
-    created?: Date | undefined;
-    /** Incident reporter name */
-    reporter?: string | undefined;
-    /** Incident description */
-    description?: string | undefined;
-    tlp?: IncidentTlp | undefined;
-
-    constructor(data?: IIncidentDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.id = data["id"];
-            this.type = data["type"];
-            this.detected = data["detected"] ? new Date(data["detected"].toString()) : <any>undefined;
-            this.created = data["created"] ? new Date(data["created"].toString()) : <any>undefined;
-            this.reporter = data["reporter"];
-            this.description = data["description"];
-            this.tlp = data["tlp"];
-        }
-    }
-
-    static fromJS(data: any): IncidentDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new IncidentDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["type"] = this.type;
-        data["detected"] = this.detected ? this.detected.toISOString() : <any>undefined;
-        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
-        data["reporter"] = this.reporter;
-        data["description"] = this.description;
-        data["tlp"] = this.tlp;
-        return data; 
-    }
-}
-
-export interface IIncidentDto {
-    /** Incident unique identifier */
-    id?: string | undefined;
-    type?: IncidentTypeDto | undefined;
-    /** Detected date */
-    detected?: Date | undefined;
-    /** Created date */
-    created?: Date | undefined;
-    /** Incident reporter name */
-    reporter?: string | undefined;
-    /** Incident description */
-    description?: string | undefined;
-    tlp?: IncidentTlp | undefined;
-}
-
-export class IncidentModel implements IIncidentModel {
-    type!: IncidentTypeDto;
-    /** Detected date */
-    detected!: Date;
-    /** Incident reporter name */
-    reporter!: string;
-    /** Incident description */
-    description?: string | undefined;
-    tlp!: IncidentTlp;
-
-    constructor(data?: IIncidentModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.type = data["type"];
-            this.detected = data["detected"] ? new Date(data["detected"].toString()) : <any>undefined;
-            this.reporter = data["reporter"];
-            this.description = data["description"];
-            this.tlp = data["tlp"];
-        }
-    }
-
-    static fromJS(data: any): IncidentModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new IncidentModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["type"] = this.type;
-        data["detected"] = this.detected ? this.detected.toISOString() : <any>undefined;
-        data["reporter"] = this.reporter;
-        data["description"] = this.description;
-        data["tlp"] = this.tlp;
-        return data; 
-    }
-}
-
-export interface IIncidentModel {
     type: IncidentTypeDto;
-    /** Detected date */
-    detected: Date;
-    /** Incident reporter name */
+    modified: Date;
+    created: Date;
     reporter: string;
-    /** Incident description */
-    description?: string | undefined;
-    tlp: IncidentTlp;
 }
 
-/** Object Id */
+export enum IncidentTypeDto {
+    None = "None",
+    Malware = "Malware",
+    Phishing = "Phishing",
+    SocialEngineering = "SocialEngineering",
+    Ddos = "Ddos",
+}
+
 export class ObjectId implements IObjectId {
     id!: string;
 
@@ -465,7 +321,7 @@ export class ObjectId implements IObjectId {
 
     init(data?: any) {
         if (data) {
-            this.id = data["id"];
+            this.id = data["Id"];
         }
     }
 
@@ -478,22 +334,80 @@ export class ObjectId implements IObjectId {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
+        data["Id"] = this.id;
         return data; 
     }
 }
 
-/** Object Id */
 export interface IObjectId {
     id: string;
 }
 
-/** Traffic Lights Protocol */
 export enum IncidentTlp {
-    Red = "red",
-    Yellow = "yellow",
-    Green = "green",
-    White = "white",
+    Red = "Red",
+    Yellow = "Yellow",
+    Green = "Green",
+    White = "White",
+}
+
+export class IncidentDto implements IIncidentDto {
+    id!: string;
+    type!: IncidentTypeDto;
+    detected!: Date;
+    created!: Date;
+    reporter?: string | undefined;
+    description?: string | undefined;
+    tlp!: IncidentTlp;
+
+    constructor(data?: IIncidentDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["Id"];
+            this.type = data["Type"];
+            this.detected = data["Detected"] ? new Date(data["Detected"].toString()) : <any>undefined;
+            this.created = data["Created"] ? new Date(data["Created"].toString()) : <any>undefined;
+            this.reporter = data["Reporter"];
+            this.description = data["Description"];
+            this.tlp = data["Tlp"];
+        }
+    }
+
+    static fromJS(data: any): IncidentDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new IncidentDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["Id"] = this.id;
+        data["Type"] = this.type;
+        data["Detected"] = this.detected ? this.detected.toISOString() : <any>undefined;
+        data["Created"] = this.created ? this.created.toISOString() : <any>undefined;
+        data["Reporter"] = this.reporter;
+        data["Description"] = this.description;
+        data["Tlp"] = this.tlp;
+        return data; 
+    }
+}
+
+export interface IIncidentDto {
+    id: string;
+    type: IncidentTypeDto;
+    detected: Date;
+    created: Date;
+    reporter?: string | undefined;
+    description?: string | undefined;
+    tlp: IncidentTlp;
 }
 
 export class SwaggerException extends Error {

@@ -2,9 +2,12 @@
   "runtime": "NetCore22",
   "defaultVariables": null,
   "documentGenerator": {
-    "fromDocument": {
-      "url": "../../../contract/incidents.yaml",
-      "output": null
+    "webApiToOpenApi": {
+      "output": null,
+      "IsAspNetCore" : true,
+      "assemblyPaths": [
+        "../bin/Debug/netcoreapp2.2/Incidents.Web.dll"
+      ]
     }
   },
   "codeGenerators": {
