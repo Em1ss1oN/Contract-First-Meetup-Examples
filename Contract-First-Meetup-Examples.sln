@@ -7,11 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Incidents.Web", "src\Incide
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Incidents.Client", "src\Incidents.Client\Incidents.Client.csproj", "{5C002EFA-298E-4DAD-AB28-2C6F9C7603DB}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "contract", "contract", "{76AD46F6-F77D-4B1E-94E3-AB5699CE78C9}"
-ProjectSection(SolutionItems) = preProject
-	contract\incidents.yaml = contract\incidents.yaml
-EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
