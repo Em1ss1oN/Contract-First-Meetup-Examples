@@ -81,32 +81,18 @@ export class IncidentsClient {
         return _observableOf<IncidentListDto | null>(<any>null);
     }
 
-    create(type: IncidentTypeDto, detected: Date, reporter: string | null, description: string | null | undefined, tlp: IncidentTlp): Observable<ObjectId | null> {
-        let url_ = this.baseUrl + "/api/incidents?";
-        if (type === undefined || type === null)
-            throw new Error("The parameter 'type' must be defined and cannot be null.");
-        else
-            url_ += "Type=" + encodeURIComponent("" + type) + "&"; 
-        if (detected === undefined || detected === null)
-            throw new Error("The parameter 'detected' must be defined and cannot be null.");
-        else
-            url_ += "Detected=" + encodeURIComponent(detected ? "" + detected.toJSON() : "") + "&"; 
-        if (reporter === undefined)
-            throw new Error("The parameter 'reporter' must be defined.");
-        else
-            url_ += "Reporter=" + encodeURIComponent("" + reporter) + "&"; 
-        if (description !== undefined)
-            url_ += "Description=" + encodeURIComponent("" + description) + "&"; 
-        if (tlp === undefined || tlp === null)
-            throw new Error("The parameter 'tlp' must be defined and cannot be null.");
-        else
-            url_ += "Tlp=" + encodeURIComponent("" + tlp) + "&"; 
+    create(request: IncidentModel | null): Observable<ObjectId | null> {
+        let url_ = this.baseUrl + "/api/incidents";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(request);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Content-Type": "application/json", 
                 "Accept": "application/json"
             })
         };
@@ -341,6 +327,58 @@ export class ObjectId implements IObjectId {
 
 export interface IObjectId {
     id: string;
+}
+
+export class IncidentModel implements IIncidentModel {
+    type!: IncidentTypeDto;
+    detected!: Date;
+    reporter!: string;
+    description?: string | undefined;
+    tlp!: IncidentTlp;
+
+    constructor(data?: IIncidentModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.type = data["Type"];
+            this.detected = data["Detected"] ? new Date(data["Detected"].toString()) : <any>undefined;
+            this.reporter = data["Reporter"];
+            this.description = data["Description"];
+            this.tlp = data["Tlp"];
+        }
+    }
+
+    static fromJS(data: any): IncidentModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new IncidentModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["Type"] = this.type;
+        data["Detected"] = this.detected ? this.detected.toISOString() : <any>undefined;
+        data["Reporter"] = this.reporter;
+        data["Description"] = this.description;
+        data["Tlp"] = this.tlp;
+        return data; 
+    }
+}
+
+export interface IIncidentModel {
+    type: IncidentTypeDto;
+    detected: Date;
+    reporter: string;
+    description?: string | undefined;
+    tlp: IncidentTlp;
 }
 
 export enum IncidentTlp {

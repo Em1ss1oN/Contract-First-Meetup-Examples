@@ -22,7 +22,7 @@ namespace Incidents.Web.Controllers
         
         [Route("/api/incidents/")]
         [HttpPost]
-        public Task<ObjectId> Create(IncidentModel request, CancellationToken cancellationToken)
+        public Task<ObjectId> Create([FromBody] IncidentModel request, CancellationToken cancellationToken)
         {
             return Task.FromResult(_fixture.Create<ObjectId>());
         }
