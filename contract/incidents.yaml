@@ -107,7 +107,7 @@ definitions:
     required:
       - id
       - modified
-      - status
+      - created
     properties:
       id:
         type: string
@@ -140,6 +140,11 @@ definitions:
       - socialEngineering
       - ddos
   IncidentDto:
+    required:
+      - id
+      - modified
+      - created
+      - detected
     type: object
     properties:
       id:
@@ -155,6 +160,11 @@ definitions:
         minlength: 1
         description: Detected date
       created:
+        format: date-time
+        type: string
+        minlength: 1
+        description: Created date
+      modified:
         format: date-time
         type: string
         minlength: 1

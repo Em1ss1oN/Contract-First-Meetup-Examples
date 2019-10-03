@@ -1,0 +1,28 @@
+<p>create-incident works!</p>
+<div>
+  <label>Traffic Lights Protocol:
+    <select [(ngModel)]="Incident.tlp">
+      <option *ngFor="let opt of getTlps()" [value]="opt">{{opt}}</option>
+    </select>
+  </label>
+</div>
+<div>
+  <label>Description:
+    <textarea [(ngModel)]="Incident.description" placeholder="Description"></textarea>
+  </label>
+</div>
+<div>
+  <label>Reporter:
+    <input [(ngModel)]="Incident.reporter" placeholder="Reporter"/>
+  </label>
+</div>
+<div>
+  <label>Type:
+    <select [(ngModel)]="Incident.type">e
+      <option *ngFor="let opt of getTypes()" [value]="opt">{{opt}}</option>
+    </select>
+  </label>
+</div>
+<div>
+  <button (click)="onSubmit()"> Save </button>
+</div>

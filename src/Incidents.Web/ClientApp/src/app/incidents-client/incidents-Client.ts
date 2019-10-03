@@ -260,7 +260,7 @@ export class IncidentListItemDto implements IIncidentListItemDto {
     /** Modified date */
     modified!: Date;
     /** Created date */
-    created?: Date | undefined;
+    created!: Date;
     /** Incident reporter name */
     reporter?: string | undefined;
 
@@ -308,7 +308,7 @@ export interface IIncidentListItemDto {
     /** Modified date */
     modified: Date;
     /** Created date */
-    created?: Date | undefined;
+    created: Date;
     /** Incident reporter name */
     reporter?: string | undefined;
 }
@@ -324,12 +324,14 @@ export enum IncidentTypeDto {
 
 export class IncidentDto implements IIncidentDto {
     /** Incident unique identifier */
-    id?: string | undefined;
+    id!: string;
     type?: IncidentTypeDto | undefined;
     /** Detected date */
-    detected?: Date | undefined;
+    detected!: Date;
     /** Created date */
-    created?: Date | undefined;
+    created!: Date;
+    /** Created date */
+    modified!: Date;
     /** Incident reporter name */
     reporter?: string | undefined;
     /** Incident description */
@@ -351,6 +353,7 @@ export class IncidentDto implements IIncidentDto {
             this.type = data["type"];
             this.detected = data["detected"] ? new Date(data["detected"].toString()) : <any>undefined;
             this.created = data["created"] ? new Date(data["created"].toString()) : <any>undefined;
+            this.modified = data["modified"] ? new Date(data["modified"].toString()) : <any>undefined;
             this.reporter = data["reporter"];
             this.description = data["description"];
             this.tlp = data["tlp"];
@@ -370,6 +373,7 @@ export class IncidentDto implements IIncidentDto {
         data["type"] = this.type;
         data["detected"] = this.detected ? this.detected.toISOString() : <any>undefined;
         data["created"] = this.created ? this.created.toISOString() : <any>undefined;
+        data["modified"] = this.modified ? this.modified.toISOString() : <any>undefined;
         data["reporter"] = this.reporter;
         data["description"] = this.description;
         data["tlp"] = this.tlp;
@@ -379,12 +383,14 @@ export class IncidentDto implements IIncidentDto {
 
 export interface IIncidentDto {
     /** Incident unique identifier */
-    id?: string | undefined;
+    id: string;
     type?: IncidentTypeDto | undefined;
     /** Detected date */
-    detected?: Date | undefined;
+    detected: Date;
     /** Created date */
-    created?: Date | undefined;
+    created: Date;
+    /** Created date */
+    modified: Date;
     /** Incident reporter name */
     reporter?: string | undefined;
     /** Incident description */

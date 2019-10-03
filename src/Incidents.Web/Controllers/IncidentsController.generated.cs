@@ -61,9 +61,9 @@ namespace Incidents.Web.Controllers
         public System.DateTimeOffset Modified { get; set; }
     
         /// <summary>Created date</summary>
-        [Newtonsoft.Json.JsonProperty("created", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [System.ComponentModel.DataAnnotations.StringLength(int.MaxValue, MinimumLength = 1)]
-        public System.DateTimeOffset? Created { get; set; }
+        [Newtonsoft.Json.JsonProperty("created", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.DateTimeOffset Created { get; set; }
     
         /// <summary>Incident reporter name</summary>
         [Newtonsoft.Json.JsonProperty("reporter", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -98,23 +98,28 @@ namespace Incidents.Web.Controllers
     public partial class IncidentDto 
     {
         /// <summary>Incident unique identifier</summary>
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [System.ComponentModel.DataAnnotations.StringLength(int.MaxValue, MinimumLength = 1)]
-        public System.Guid? Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Guid Id { get; set; }
     
         [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public IncidentTypeDto? Type { get; set; }
     
         /// <summary>Detected date</summary>
-        [Newtonsoft.Json.JsonProperty("detected", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [System.ComponentModel.DataAnnotations.StringLength(int.MaxValue, MinimumLength = 1)]
-        public System.DateTimeOffset? Detected { get; set; }
+        [Newtonsoft.Json.JsonProperty("detected", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.DateTimeOffset Detected { get; set; }
     
         /// <summary>Created date</summary>
-        [Newtonsoft.Json.JsonProperty("created", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [System.ComponentModel.DataAnnotations.StringLength(int.MaxValue, MinimumLength = 1)]
-        public System.DateTimeOffset? Created { get; set; }
+        [Newtonsoft.Json.JsonProperty("created", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.DateTimeOffset Created { get; set; }
+    
+        /// <summary>Created date</summary>
+        [Newtonsoft.Json.JsonProperty("modified", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.DateTimeOffset Modified { get; set; }
     
         /// <summary>Incident reporter name</summary>
         [Newtonsoft.Json.JsonProperty("reporter", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
