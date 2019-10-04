@@ -25,13 +25,11 @@ namespace Incidents.gRPC.Services
         public override Task<IncidentsListReply> GetAll(IncidentsRequest request, ServerCallContext context)
         {
             _fixture.Customize<IncidentsListReply>(c =>
-                c.With(dto => dto.Items, () =>
+                c.Do(dto =>
                 {
-                    var repeatedField = new RepeatedField<IncidentsListItem>();
                     var result = _fixture.CreateMany<IncidentsListItem>(request.Limit > 0 ? request.Limit : 100)
                         .ToList();
-                    repeatedField.AddRange(result);
-                    return repeatedField;
+                    dto.Items.AddRange(result);
                 }));
             return Task.FromResult(_fixture.Create<IncidentsListReply>());
         }

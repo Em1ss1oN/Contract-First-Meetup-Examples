@@ -5,12 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\incidents.proto" GrpcServices="Server" />
+    <Protobuf Include="..\..\contract\incidents.proto" GrpcServices="Server" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoFixture" Version="4.11.0" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.23.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\contract\incidents.proto">
+      <Link>Protos\incidents.proto</Link>
+    </Content>
   </ItemGroup>
 
 </Project>
