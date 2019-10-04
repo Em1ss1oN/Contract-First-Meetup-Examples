@@ -1,0 +1,79 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Incidents.gRPC";
+
+package Cert;
+
+// The incidents service definition.
+service Incidents {
+  // requests an incident by id
+  rpc Get (IncidentRequest) returns (IncidentDto);
+  
+  // create an incident
+  rpc Create (IncidentModel) returns (ObjectId);
+  
+  // requests incidents list
+  rpc GetAll (IncidentsRequest) returns (IncidentsListReply);
+}
+
+message IncidentRequest {
+  string id = 1;
+}
+
+message IncidentsRequest {
+  int32 limit = 1;
+  int32 offset = 2;
+}
+
+// The response message containing the Incidents and total count.
+message IncidentsListReply {
+  int32 total = 1;
+  repeated IncidentsListItem items = 2;
+}
+
+message IncidentsListItem {
+  string id = 1;
+  IncidentType type = 2;
+  google.protobuf.Timestamp modified = 3;
+  google.protobuf.Timestamp created = 4;
+  string reporter = 5;
+}
+
+enum IncidentType {
+  none = 0;
+  malware = 1;
+  phishing = 2;
+  socialEngineering = 3;
+  ddos = 4;
+}
+
+message IncidentDto {
+  string id = 1;
+  IncidentType type = 2;
+  google.protobuf.Timestamp modified = 3;
+  google.protobuf.Timestamp created = 4;
+  string reporter = 5;
+  google.protobuf.Timestamp detected = 6;
+  string description = 7;
+  IncidentTlp tlp = 8;
+}
+
+message ObjectId {
+  string id = 1;
+}
+
+message IncidentModel {
+  IncidentType type = 1;
+  string reporter = 2;
+  google.protobuf.Timestamp detected = 3;
+  string description = 4;
+  IncidentTlp tlp = 5;
+}
+
+enum IncidentTlp {
+  red = 0;
+  yellow = 1;
+  green = 2;
+  white = 3;
+}
